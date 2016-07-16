@@ -9,10 +9,8 @@
  */
 
 const env     = require('dotenv').config();
-const path    = require('path');
 const pg      = require('pg');
-const config  = require(path.join(__dirname, '../', '../', 'config'));
-const client  = new pg.Client(config.db_url);
+const client  = new pg.Client(env.PARE_DB_URL);
 
 
 // Connect to the PostgreSQL database on startup and alert upon error
