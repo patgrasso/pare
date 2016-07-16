@@ -1,0 +1,24 @@
+{
+  "name": "pare",
+  "version": "0.0.1",
+  "description": "Comparative local shopping",
+  "main": "server.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/patgrasso/pare.git"
+  },
+  "author": "Patrick Grasso, Matt Lagarenne, Rob Shea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patgrasso/pare/issues"
+  },
+  "homepage": "https://github.com/patgrasso/pare#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "pg": "^6.0.2"
+  }
+}
