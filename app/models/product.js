@@ -18,8 +18,8 @@ module.exports.create = (name) => {
   }
   return db.query(
     'INSERT INTO products(name) ' +
-    'VALUES($1);', [ name ]
-  );
+    'VALUES($1) RETURNING id, name;', [ name ]
+  ).then((result) => result.rows[0]);
 };
 
 
@@ -34,6 +34,7 @@ module.exports.remove = (name) => {
   let query = isNaN(parseInt(name))
               ? 'DELETE FROM products WHERE name=$1'
               : 'DELETE FROM products WHERE id=$1';
+  query += ' RETURNING *;';
   return db.query(query, [ name ]);
 };
 
@@ -52,12 +53,4 @@ module.exports.search = (term) => {
     ['%' + term + '%']
   ).then((result) => result.rows);
 };
-
-
-module.exports.create('milk')
-  .then((res) => console.log(res))
-  .catch((err) => console.log(err));
-module.exports.remove('milk')
-  .then((res) => console.log(res))
-  .catch((err) => console.log(err));
 

@@ -34,7 +34,7 @@ module.exports.create = function (
   return db.query(
     'INSERT INTO listings(' +
     '  product_id, store_id, price, quantity, unitType, date' +
-    ') VALUES($1, $2, $3, $4, $5, $6)',
+    ') VALUES($1, $2, $3, $4, $5, $6) RETURNING *;',
     [
       productId,
       storeId,
@@ -43,7 +43,7 @@ module.exports.create = function (
       unitType,
       date
     ]
-  );
+  ).then((result) => result.rows[0]);
 };
 
 
@@ -55,10 +55,11 @@ module.exports.create = function (
  * @return {Promise} Promise resolving upon query completion
  */
 module.exports.remove = (name) => {
-  return db.query(
-    'DELETE FROM listings WHERE name=$1 OR id=$1',
-    [ name ]
-  ).then((result) => result.rows);
+  let query = isNaN(parseInt(name))
+              ? 'DELETE FROM products WHERE name=$1'
+              : 'DELETE FROM products WHERE id=$1';
+  query += ' RETURNING *;';
+  return db.query(query, [ name ]);
 };
 
 
