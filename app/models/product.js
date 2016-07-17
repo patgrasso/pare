@@ -18,7 +18,7 @@ module.exports.create = (name) => {
   }
   return db.query(
     'INSERT INTO products(name) ' +
-    'VALUES($1) RETURNING id, name;', [ name ]
+    'VALUES($1) RETURNING id, name;', [ name.toLowerCase() ]
   ).then((result) => result.rows[0]);
 };
 
@@ -35,7 +35,12 @@ module.exports.remove = (name) => {
               ? 'DELETE FROM products WHERE name=$1'
               : 'DELETE FROM products WHERE id=$1';
   query += ' RETURNING *;';
-  return db.query(query, [ name ]);
+
+  if (isNaN(parseInt(name))) {
+    return db.query(query, [ name.toLowerCase() ]);
+  } else {
+    return db.query(query, [ parseInt(name) ]);
+  }
 };
 
 
