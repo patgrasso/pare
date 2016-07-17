@@ -49,7 +49,7 @@ client.query(
   ' product_id  INT       REFERENCES products(id) NOT NULL,' +
   ' store_id    INT       REFERENCES stores(id)   NOT NULL,' +
   ' price       MONEY     NOT NULL,' +
-  ' quantity    INT       ,' +
+  ' quantity    FLOAT     ,' +
   ' unit_type   VARCHAR   ,' +
   ' date        TIMESTAMP NOT NULL' +
   ');',
