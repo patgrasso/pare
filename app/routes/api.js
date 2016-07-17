@@ -3,7 +3,7 @@
  */
 
 const express  = require('express');
-const keys     = require('../../keys.conf');
+//const keys     = require('../../keys.conf');
 const products = require('../models/product');
 const listings = require('../models/listing');
 const stores   = require('../models/store');
