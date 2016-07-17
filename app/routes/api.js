@@ -30,10 +30,7 @@ api.get('/listings', (req, res) => {
 api.post('/listings', (req, res) => {
 // Adds a new listing in the listings table and updates products and stores if necessary
   if ( req.body.name == null || req.body.name == '' ||
-       req.body.storeName == null || req.body.storeName == '' ||
-       isNaN(parseFloat(req.body.lat)) ||
-       isNaN(parseFloat(req.body.lon)) ||
-       req.body.address == null ||
+       isNaN(req.body.storeID) ||
        isNaN(parseFloat(req.body.price)) ||
        isNaN(parseFloat(req.body.quantity)) ||
        req.body.type == null || req.body.type == '' ) {
@@ -43,22 +40,19 @@ api.post('/listings', (req, res) => {
     req.body.date = req.body.date || new Date();
     // at this point we have to check if the name is already there
     prom =  Promise.resolve();
-
     if ( isNaN(parseInt(req.body.productID) ) ) {
-      prom.then(products.create(req.body.name));
+      prom = products.create(req.body.name);
     }
     prom.then( (prod) => req.body.productID = parseInt(req.body.productID) || prod.id );
     
-
     if ( isNaN(parseInt(req.body.storeID) ) ) {
-      prom = Promise.all([prom, stores.create( req.body.storeName,
-		                 [ parseFloat(req.body.lat), parseFloat(req.body.lon) ],
-				 req.body.address )])
-	      .then((vals) => vals[vals.length - 1]);
+      prom = stores.create(req.body.storeName,
+		           [ parseFloat(req.body.lat), parseFloat(req.body.lon) ],
+			   req.body.address);
     }
-    prom
-      .then( (store) => req.body.storeID = parseInt(req.body.storeID)  || store.id )
-      .then( () => {
+    prom.then( (prod) => req.body.storeID = parseInt(req.body.storeID) || prod.id );
+
+    prom.then( () => {
         return listings
 	  .create( req.body.productID,
 	           req.body.storeID,

@@ -58,7 +58,3 @@ module.exports.search = (term) => {
     ['%' + term + '%']
   ).then((result) => result.rows);
 };
-
-let x = Promise.resolve();
-x = Promise.all((module.exports.create('ream cf')));
-x.then(prod => console.log(prod));
