@@ -1,0 +1,12 @@
+html(ng-app='pareApp')
+  head
+  body(ng-controller='MainController')
+    include ../partials/nav
+    h1 What are you looking for?
+    input#search(ng-model='searchQuery', ng-change='search()')
+    ul
+      li(ng-repeat='item in items')
+        span
+          {{item.name}}
+        p     {{item.price}}
+    include ../partials/scripts

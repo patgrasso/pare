@@ -1,0 +1,22 @@
+{
+  "name": "pare",
+  "version": "0.0.0",
+  "homepage": "https://github.com/patgrasso/pare",
+  "authors": [
+    "Pat Grasso",
+    "Matt Lagarenne",
+    "Rob Shea"
+  ],
+  "description": "Comparative local shopping",
+  "keywords": [
+    "shopping"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
