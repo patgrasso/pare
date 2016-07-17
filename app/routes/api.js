@@ -30,13 +30,13 @@ api.get('/listings', (req, res) => {
 api.post('/listings', (req, res) => {
   // Adds a new listing in the listings table and updates products and stores if necessary
   if ( req.body.name == null || req.body.name == '' ||
-       req.body.storeName == null || req.body.storeName == '' ||
-       isNaN(parseFloat(req.body.lat)) ||
-       isNaN(parseFloat(req.body.lon)) ||
-       req.body.address == null ||
-       isNaN(parseFloat(req.body.price)) ||
-       isNaN(parseFloat(req.body.quantity)) ||
-       req.body.type == null || req.body.type == '' ) {
+      req.body.storeName == null || req.body.storeName == '' ||
+      isNaN(parseFloat(req.body.lat)) ||
+      isNaN(parseFloat(req.body.lon)) ||
+      req.body.address == null ||
+      isNaN(parseFloat(req.body.price)) ||
+      isNaN(parseFloat(req.body.quantity)) ||
+      req.body.type == null || req.body.type == '' ) {
     res.status(400);
     res.json({error:'Some fields are empty!'});
   } else {
@@ -48,13 +48,13 @@ api.post('/listings', (req, res) => {
       prom.then(products.create(req.body.name));
     }
     prom.then( (prod) => req.body.productID = parseInt(req.body.productID) || prod.id );
-    
+
 
     if ( isNaN(parseInt(req.body.storeID) ) ) {
       prom = Promise.all([prom, stores.create( req.body.storeName,
-		                 [ parseFloat(req.body.lat), parseFloat(req.body.lon) ],
-				 req.body.address )])
-	      .then((vals) => vals[vals.length - 1]);
+            [ parseFloat(req.body.lat), parseFloat(req.body.lon) ],
+            req.body.address )])
+        .then((vals) => vals[vals.length - 1]);
     }
     prom
       .then( (store) => req.body.storeID = parseInt(req.body.storeID)  || store.id )
@@ -100,7 +100,7 @@ api.get('/stores', (req, res) => {
     res.json({error:"Invalid parameters"});
   } else {
     var gmAPI = new maps( {
-    key: env.PARE_GOOGLE_MAPS_KEY,
+      key: env.PARE_GOOGLE_MAPS_KEY,
       stagger_time:     1000,
       encode_polylines: false,
       secure:           true
