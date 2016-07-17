@@ -94,6 +94,7 @@ module.exports.searchByName = (term) => {
   return db.query(
     'SELECT * ' +
     'FROM products INNER JOIN listings ON (products.id = listings.product_id) ' +
+    'INNER JOIN stores ON (stores.id = listings.store_id) ' +
     'WHERE name LIKE $1;',
     ['%' + term.toLowerCase() + '%']
   ).then((result) => result.rows);
