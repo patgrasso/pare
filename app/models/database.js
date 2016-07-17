@@ -45,16 +45,19 @@ function isValidTableName(tableName) {
  *
  * @function query
  * @param {String} queryString Query to execute on the database
- * @param {Function} callback Callback function that accepts two parameters:
- *    err and result
- * @return {Object} The query object returned from pg.Client.query
- *    @see The [node-postgres documentation]
- *      (https://github.com/brianc/node-postgres/wiki/Client) for more info
+ * @return {Promise} Promise resolving upon query completion
  */
-function query(queryString, values, callback) {
-  return client.query(queryString, values, function (err, result) {
-    callback(err, result);
-  });
+function query(queryString, values) {
+  return new Promise((resolve, reject) => client.query(
+    queryString,
+    values,
+    function (err, result) {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    }
+  ));
 }
 
 
