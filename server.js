@@ -10,6 +10,9 @@ const database = require('./app/models/database');
 
 app.use('/', router);
 
+app.set('view engine', 'jade');
+app.set('views', __dirname + '/public/views');
+
 
 // FIXME: All of the below is subject to SQL injection
 app.get('/make', (req, res) => {

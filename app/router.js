@@ -9,5 +9,6 @@ let   router     = express.Router();
 router.use(bodyParser.json());
 
 router.use('/api', require('./routes/api'));
+router.use('/', require('./routes/content'));
 
 module.exports = router;
