@@ -20,10 +20,6 @@ module.exports.create = function (
   unitType,
   date
 ) {
-  if (name == null) {
-    throw TypeError('Name must not be null');
-  }
-
   date = date || new Date();
 
   if (productId == null || storeId == null || isNaN(parseFloat(price)) ||
