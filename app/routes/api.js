@@ -59,7 +59,7 @@ api.post('/listings', (req, res) => {
       .catch( (err) => {
         console.log(err);
         res.status(500);
-        res.json({error:"Cannot insert new listing"});
+        res.json({error:'Cannot insert new listing'});
       });
   }
 
@@ -83,34 +83,26 @@ api.get('/products', (req, res) => {
 });
 
 api.get('/stores', (req, res) => {
-  <<<<<<< Updated upstream
-    if ( isNaN(req.query.posx) || isNaN(req.query.posy) ) {
-      res.status(400);
-      res.json({error:"No location provided"});
-    } else {
-      var gmAPI = new maps(keys.google_config);
-      var location_x = parseFloat(req.query.posx); 
-      var location_y = parseFloat(req.query.posy); 
+  if ( isNaN(req.query.posx) || isNaN(req.query.posy) ) {
+    res.status(400);
+    res.json({error:'No location provided'});
+  } else {
+    var gmAPI = new maps(keys.google_config);
+    var location_x = parseFloat(req.query.posx);
+    var location_y = parseFloat(req.query.posy);
 
-      const config = {
-        location: req.query.posx.toString() + "," + req.query.posy.toString(),
-        radius:   300,
-        types:    ['store']
-      }
-      console.log(config);
-
-      gmAPI.placeSearch( config, (err, results) => {
-        console.log(results.results);
-        res.json(results);
-      });
-
-
-
+    const config = {
+      location: req.query.posx.toString() + ',' + req.query.posy.toString(),
+      radius:   300,
+      types:    ['store']
     }
+    console.log(config);
 
-  =======
-    res.send('NOT IMPLEMENTED YET');
-  >>>>>>> Stashed changes
+    gmAPI.placeSearch( config, (err, results) => {
+      console.log(results.results);
+      res.json(results);
+    });
+  }
 });
 
 module.exports = api;
