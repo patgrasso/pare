@@ -16,7 +16,8 @@ client.connect((err) => {
 
 client.query(
   'DROP TABLE products;' +
-  'DROP TABLE stores;',
+  'DROP TABLE stores;' +
+  'DROP TABLE listings;',
   (err) => {
     if (err) {
       console.error('Error: Failed to drop tables', err);

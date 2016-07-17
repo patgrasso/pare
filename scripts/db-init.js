@@ -16,9 +16,10 @@ client.connect((err) => {
 
 client.query(
   'CREATE TABLE stores(' +
-  ' ID SERIAL PRIMARY KEY NOT NULL,' +
-  ' NAME      TEXT        NOT NULL,' +
-  ' LOCATION  POINT       NOT NULL' +
+  ' id SERIAL PRIMARY KEY NOT NULL,' +
+  ' name      TEXT        NOT NULL,' +
+  ' location  POINT       NOT NULL,' +
+  ' address   VARCHAR' +
   ');',
   (err) => {
     if (err) {
@@ -31,13 +32,26 @@ client.query(
 
 client.query(
   'CREATE TABLE products(' +
-  ' ID SERIAL PRIMARY KEY NOT NULL,' +
-  ' NAME      TEXT        NOT NULL,' +
-  ' STORE_ID  INT         ,' +
-  ' PRICE     MONEY       NOT NULL,' +
-  ' QUANTITY  INT         ,' +
-  ' DATE      TIMESTAMP   NOT NULL,' +
-  ' CATEGORY  TEXT        ' +
+  ' id SERIAL PRIMARY KEY NOT NULL,' +
+  ' name      TEXT        NOT NULL,' +
+  ');',
+  (err) => {
+    if (err) {
+      console.error('Error: Failed to create `products` table');
+    } else {
+      console.log('Successfully created `products` table');
+    }
+  }
+);
+
+client.query(
+  'CREATE TABLE listings(' +
+  ' product_id  INT       FOREIGN KEY REFERENCES products(id) NOT NULL,' +
+  ' store_id    INT       FOREIGN KEY REFERENCES stores(id)   NOT NULL,' +
+  ' price       MONEY     NOT NULL,' +
+  ' quantity    INT       ,' +
+  ' unit_type   VARCHAR   ,' +
+  ' date        TIMESTAMP NOT NULL,' +
   ');',
   (err) => {
     if (err) {
