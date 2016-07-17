@@ -98,7 +98,8 @@ module.exports.searchByName = (term) => {
     '       stores.location, stores.address ' +
     'FROM products INNER JOIN listings ON (products.id = listings.product_id) ' +
     'INNER JOIN stores ON (stores.id = listings.store_id) ' +
-    'WHERE products.name LIKE $1;',
+    'WHERE products.name LIKE $1 ' +
+    'ORDER BY listings.price;',
     ['%' + term.toLowerCase() + '%']
   ).then((result) => result.rows);
 };

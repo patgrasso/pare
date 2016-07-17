@@ -1,0 +1,42 @@
+html(ng-app='pareApp')
+  head
+    include ../partials/styles
+
+  body.container(ng-controller='InputController')
+    include ../partials/nav
+
+    main
+      h1 What did you find?
+      form.input-form(ng-submit='submit($event)')
+        fieldset.form-group(ng-controller='SearchController')
+          label(for='prod-name') Product
+          input#prod-name.form-control(
+            name='name',
+            ng-model='searchQuery',
+            ng-change='getSuggestions()',
+            tabindex="0"
+          )
+          ul.suggestion-box(child-of='search')
+            li.suggestion-item.small(
+              ng-repeat='(index, item) in suggestions',
+              ng-click='select(item)',
+              ng-keydown='keydown($event, item)',
+              tabindex='0'
+            )
+              {{item.name}}
+
+        fieldset.form-group
+          label(for='prod-price') Price
+          input.form-control(name='price', ng-model='prodPrice')
+
+        fieldset.form-group
+          label(for='store-name') Price
+          input.form-control(name='store-name', type='text', ng-model='storeName')
+
+        fieldset.form-group
+          label(for='quantity') Quantity
+          input.form-control(name='quantity', ng-model='quantity')
+
+        input.form-control.btn-primary(type='submit')
+
+    include ../partials/scripts

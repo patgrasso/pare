@@ -1,12 +1,43 @@
 html(ng-app='pareApp')
   head
-  body(ng-controller='MainController')
+    include ../partials/styles
+
+  body.container(ng-controller='MainController')
     include ../partials/nav
-    h1 What are you looking for?
-    input#search(ng-model='searchQuery', ng-change='search()')
-    ul
-      li(ng-repeat='item in items')
-        span
-          {{item.name}}
-        p     {{item.price}}
+
+    main
+      h1 What are you looking for?
+      form.search-form(ng-controller='SearchController', ng-submit='search()')
+        input.search-box.form-control(
+          ng-model='searchQuery',
+          ng-change='getSuggestions()',
+          tabindex="0"
+        )
+        ul.suggestion-box(child-of='search')
+          li.suggestion-item(
+            ng-repeat='(index, item) in suggestions',
+            ng-click='select(item)',
+            ng-keydown='keydown($event, item)',
+            tabindex='0'
+          )
+            {{item.name}}
+
+      div.listing-container(ng-controller='ListingController')
+        div.listing-item(ng-repeat='item in listings')
+          div.item-name
+            {{item.product_name}}
+          table.item-details
+            tr
+              td Price
+              td.item-price
+                {{item.price}}
+            tr
+              td Store
+              td.item-store
+                {{item.store_name}}
+            tr
+              td Date
+              td.item-date
+                {{item.date}}
+
     include ../partials/scripts
