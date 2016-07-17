@@ -3,9 +3,11 @@
  */
 
 const express  = require('express');
+const keys     = require('../../keys.conf');
 const products = require('../models/product');
 const listings = require('../models/listing');
-//const stores   = require('../../models/stores');
+const stores   = require('../models/store');
+const maps     = require('googlemaps');
 let   api      = express.Router();
 
 api.get('/listings', (req, res) => {
@@ -37,29 +39,28 @@ api.post('/listings', (req, res) => {
     req.body.date = req.body.date || new Date();
     // at this point we have to check if the name is already there
     prom =  Promise.resolve();
-    if ( isNaN(req.body.productID) ) {
+    if ( isNaN(parseInt(req.body.productID) ) ) {
       prom = products.create(req.body.name);
     }
 
     prom
-      .then( (prodID) => req.body.productID = req.body.productID || prodID )
+      .then( (prod) => req.body.productID = parseInt(req.body.productID) || prod.id )
       .then( () => {
-        listings
+	console.log(req.body);
+        return listings
 	  .create( req.body.productID,
 	           req.body.storeID,
 		   parseFloat(req.body.price),
 		   parseFloat(req.body.quantity),
 		   req.body.type,
-		   req.body.date,
-		   req.body.description )
-	  .then(res.json({success:"true"}))
-	  .catch( (err) => {
-	    console.log(err)
-	    res.status(500);
-	    res.json({error:err});
-	  });
+		   req.body.date )
       })
-      .catch( (err) => console.log(err));
+      .then( () => res.json({success:"true"}))
+      .catch( (err) => {
+	console.log(err);
+	res.status(500);
+	res.json({error:"Cannot insert new listing"});
+      });
   }
   
 });
@@ -71,7 +72,7 @@ api.get('/products', (req, res) => {
     res.json({error:"Name is undefined or empty"});
   } else {
     products
-      .searchByName(req.query.name)
+      .search(req.query.name)
       .then( (results) => res.json(results)) 
       .catch( (err) => {
 	console.log(err);
@@ -82,7 +83,30 @@ api.get('/products', (req, res) => {
 });
 
 api.get('/stores', (req, res) => {
-  asdf();  
+  if ( isNaN(req.query.posx) || isNaN(req.query.posy) ) {
+    res.status(400);
+    res.json({error:"No location provided"});
+  } else {
+    var gmAPI = new maps(keys.google_config);
+    var location_x = parseFloat(req.query.posx); 
+    var location_y = parseFloat(req.query.posy); 
+
+    const config = {
+      location: req.query.posx.toString() + "," + req.query.posy.toString(),
+      radius:   300,
+      types:    ['store']
+    }
+    console.log(config);
+
+    gmAPI.placeSearch( config, (err, results) => {
+      console.log(results.results);
+      res.json(results);
+    });
+      
+    
+
+  }
+
 });
 
 module.exports = api;
