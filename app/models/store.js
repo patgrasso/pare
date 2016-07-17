@@ -15,18 +15,21 @@ const db = require('./database');
  * @return {Promise} Promise resolving upon query completion
  * TODO: Maybe use GMaps api to get the street address of the store
  */
-module.exports.create = function (name, location) {
+module.exports.create = function (name, location, address) {
   if (name == null) {
     throw TypeError('Name must not be null');
   }
   if (!Array.isArray(location) || location.length < 2) {
     throw TypeError('Location must be a 2-element list [x, y]');
   }
+  if (address == null) {
+    throw TypeError('Address must not be null');
+  }
 
   return db.query(
-    'INSERT INTO stores(name, location) ' +
-    'VALUES($1, point($2, $3)) RETURNING *;',
-    [ name, location[0], location[1] ]
+    'INSERT INTO stores(name, location, address) ' +
+    'VALUES($1, point($2, $3), $4) RETURNING *;',
+    [ name, location[0], location[1], address ]
   ).then((result) => result.rows[0]);
 };
 
@@ -91,4 +94,3 @@ module.exports.searchByLocation = (position) => {
     [ position[0], position[1] ]
   ).then((result) => result.rows);
 };
-
