@@ -9,7 +9,7 @@ const db = require('./database');
  * Create a new listing
  *
  * @function create
- * @param {String} name *Unique* name of the listing
+ * @param A BUNCH OF STUFF woloooll
  * @return {Promise} Promise resolving upon query completion
  */
 module.exports.create = function (
@@ -55,7 +55,12 @@ module.exports.remove = (name) => {
               ? 'DELETE FROM products WHERE name=$1'
               : 'DELETE FROM products WHERE id=$1';
   query += ' RETURNING *;';
-  return db.query(query, [ name ]);
+
+  if (isNaN(parseInt(name))) {
+    return db.query(query, [ name.toLowerCase() ]);
+  } else {
+    return db.query(query, [ parseInt(name) ]);
+  }
 };
 
 
@@ -71,7 +76,7 @@ module.exports.findByProductName = (name) => {
     'SELECT * ' +
     'FROM products INNER JOIN listings ' +
     'WHERE name=$1;',
-    [ name ]
+    [ name.toLowerCase() ]
   ).then((result) => result.rows);
 };
 
@@ -90,7 +95,7 @@ module.exports.searchByName = (term) => {
     'SELECT * ' +
     'FROM products INNER JOIN listings ON (products.id = listings.product_id) ' +
     'WHERE name LIKE $1;',
-    ['%' + term + '%']
+    ['%' + term.toLowerCase() + '%']
   ).then((result) => result.rows);
 };
 
