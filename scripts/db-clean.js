@@ -6,7 +6,8 @@
 const pg  = require('pg');
 const env = require('dotenv').config();
 
-let   client = new pg.Client(env.PARE_DB_URL);
+let client = new pg.Client(env.PARE_DB_URL);
+let tablesToDrop = ['listings', 'stores', 'products'];
 
 client.connect((err) => {
   if (err) {
@@ -14,18 +15,21 @@ client.connect((err) => {
   }
 });
 
-client.query(
-  'DROP TABLE products;' +
-  'DROP TABLE stores;' +
-  'DROP TABLE listings;',
-  (err) => {
-    if (err) {
-      console.error('Error: Failed to drop tables', err);
-    } else {
-      console.log('Successfully dropped tables');
+function deleteTable(table) {
+  client.query(
+    `DROP TABLE ${table};`,
+    (err) => {
+      if (err) {
+        console.error(`Error: Failed to drop '${table}'`);
+        console.error(err);
+      } else {
+        console.log(`Successfully dropped '${table}'`);
+      }
     }
-  }
-);
+  );
+}
+
+tablesToDrop.forEach(deleteTable);
 
 client.on('drain', () => client.end());
 

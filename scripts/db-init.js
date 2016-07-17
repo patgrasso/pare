@@ -33,7 +33,7 @@ client.query(
 client.query(
   'CREATE TABLE products(' +
   ' id SERIAL PRIMARY KEY NOT NULL,' +
-  ' name      TEXT        NOT NULL,' +
+  ' name      TEXT        NOT NULL UNIQUE' +
   ');',
   (err) => {
     if (err) {
@@ -46,18 +46,19 @@ client.query(
 
 client.query(
   'CREATE TABLE listings(' +
-  ' product_id  INT       FOREIGN KEY REFERENCES products(id) NOT NULL,' +
-  ' store_id    INT       FOREIGN KEY REFERENCES stores(id)   NOT NULL,' +
+  ' product_id  INT       REFERENCES products(id) NOT NULL,' +
+  ' store_id    INT       REFERENCES stores(id)   NOT NULL,' +
   ' price       MONEY     NOT NULL,' +
   ' quantity    INT       ,' +
   ' unit_type   VARCHAR   ,' +
-  ' date        TIMESTAMP NOT NULL,' +
+  ' date        TIMESTAMP NOT NULL' +
   ');',
   (err) => {
     if (err) {
-      console.error('Error: Failed to create `products` table');
+      console.error('Error: Failed to create `listings` table');
+      console.error(err);
     } else {
-      console.log('Successfully created `products` table');
+      console.log('Successfully created `listings` table');
     }
   }
 );
