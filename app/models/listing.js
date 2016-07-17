@@ -29,7 +29,7 @@ module.exports.create = function (
 
   return db.query(
     'INSERT INTO listings(' +
-    '  product_id, store_id, price, quantity, unitType, date' +
+    '  product_id, store_id, price, quantity, unit_type, date' +
     ') VALUES($1, $2, $3, $4, $5, $6) RETURNING *;',
     [
       productId,
@@ -88,7 +88,7 @@ module.exports.findByProductName = (name) => {
 module.exports.searchByName = (term) => {
   return db.query(
     'SELECT * ' +
-    'FROM products INNER JOIN listings ' +
+    'FROM products INNER JOIN listings ON (products.id = listings.product_id) ' +
     'WHERE name LIKE $1;',
     ['%' + term + '%']
   ).then((result) => result.rows);
